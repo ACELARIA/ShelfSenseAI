@@ -1,18 +1,18 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+
+from backend.routes import router
+from backend.config import APP_NAME, VERSION
 
 app = FastAPI(
-    title="ShelfSense AI",
-    version="1.0.0"
+    title=APP_NAME,
+    version=VERSION
 )
 
-@app.get("/")
-def root():
-    return {
-        "message": "ShelfSense AI Backend Running"
-    }
+app.include_router(router)
 
-@app.get("/health")
-def health():
-    return {
-        "status": "healthy"
-    }
+app.mount(
+    "/uploads",
+    StaticFiles(directory="backend/uploads"),
+    name="uploads"
+)
