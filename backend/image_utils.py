@@ -16,27 +16,17 @@ def validate_extension(filename):
 
 def get_image_metadata(image_path):
 
-    image = Image.open(image_path)
-
-    width, height = image.size
+    with Image.open(image_path) as image:
+        width, height = image.size
 
     return width, height
 
 
 def preprocess_image(image_path):
 
-    image = cv2.imread(str(image_path))
+    image = cv2.imread(str(image_path), cv2.IMREAD_GRAYSCALE)
 
-    gray = cv2.cvtColor(
-        image,
-        cv2.COLOR_BGR2GRAY
-    )
+    if image is None:
+        raise ValueError(f"Unable to read image: {image_path}")
 
-    processed_path = image_path
-
-    cv2.imwrite(
-        str(processed_path),
-        gray
-    )
-
-    return processed_path
+    return image
