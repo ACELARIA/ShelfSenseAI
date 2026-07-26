@@ -26,3 +26,10 @@ app.mount(
     StaticFiles(directory="backend/uploads"),
     name="uploads"
 )
+
+from backend.services.ocr_services import warmup_reader
+
+@app.on_event("startup")
+async def startup():
+
+    warmup_reader()
